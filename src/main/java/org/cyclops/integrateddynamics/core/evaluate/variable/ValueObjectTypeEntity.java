@@ -155,7 +155,7 @@ public class ValueObjectTypeEntity extends ValueObjectTypeBase<ValueObjectTypeEn
                     if (MinecraftHelpers.isClientSide()) {
                         Optional<Iterable<Entity>> entities =
                             Optional.ofNullable(Minecraft.getInstance()).map(o->o.world).map(world->world.getAllEntities());
-                        if (entities.isEmpty()) {
+                        if (!entities.isPresent()) {
                             return Optional.empty();
                         }
                         for (Entity entity : entities.get()) {
