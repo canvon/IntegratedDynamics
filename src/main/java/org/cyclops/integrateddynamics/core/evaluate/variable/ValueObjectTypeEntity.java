@@ -153,7 +153,12 @@ public class ValueObjectTypeEntity extends ValueObjectTypeBase<ValueObjectTypeEn
             if (uuid.isPresent()) {
                 Optional<Entity> optionalEntity = DistExecutor.callWhenOn(Dist.CLIENT, ()->()-> {
                     if (MinecraftHelpers.isClientSide()) {
-                        for (Entity entity : Minecraft.getInstance().world.getAllEntities()) {
+                        Optional<Iterable<Entity>> entities =
+                            Optional.ofNullable(Minecraft.getInstance()).map(o->o.world).map(world->world.getAllEntities());
+                        if (entities.isEmpty()) {
+                            return Optional.empty();
+                        }
+                        for (Entity entity : entities.get()) {
                             if (entity.getUniqueID().equals(uuid.get())) {
                                 return Optional.of(entity);
                             }
